@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-import { getAuth, signInWithRedirect, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { getAuth, signInWithRedirect, signInWithPopup, createUserWithEmailAndPassword, GoogleAuthProvider } from 'firebase/auth';
 import {getFirestore, doc, getDoc, setDoc} from 'firebase/firestore'
 
 // Your web app's Firebase configuration
@@ -17,7 +17,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 //Reference to the app in the firebase
-const firebaseApp = initializeApp(firebaseConfig);
+/*const firebaseApp =*/ initializeApp(firebaseConfig);
 
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({
@@ -31,7 +31,7 @@ export const signInWithGooglePopUp = () => signInWithPopup(auth, provider);
  // so we will be needing to use useEffect hook with getRedirectResult to catch if any redirect actually happened from google.
 export const signInwithGoogleRedirect= () => signInWithRedirect(auth, provider)
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // create the db
 export const db = getFirestore();
 //takes in userauthentication object retrived from signInwithGooglePopUp
@@ -56,4 +56,10 @@ export const createUserDocumentFromAuth = async (userAuth) => {
         }
     }
     return userDocRef;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+export const loginUserWithEmailAndPassword = async (email, password) => {
+    if( !email || !password ) return;
+    return await createUserWithEmailAndPassword(auth, email, password);
 }
