@@ -14,11 +14,13 @@ const DEFAULT_FORM_FIELDS = {
 const SignUpFrom = () => {
 
     const[formFields, setFormFields] = useState(DEFAULT_FORM_FIELDS);
-    const { displayName, email, password, confirmPassword } = formFields; 
+    const { displayName, email, password, confirmPassword } = formFields;
+
     const onChangeHanler = (event) => {
         const { name, value } = event.target;
         setFormFields({...formFields, [name]:value})
     }
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         if(password !== confirmPassword){
@@ -29,6 +31,7 @@ const SignUpFrom = () => {
             const response = await loginUserWithEmailAndPassword(email, password);
             const {user} = response;
             await createUserDocumentFromAuth({...user, displayName: displayName});
+
             alert('Account created successfully, welcome ' + displayName);
             setFormFields(DEFAULT_FORM_FIELDS);
         } catch (error){

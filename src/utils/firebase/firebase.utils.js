@@ -2,7 +2,15 @@
 import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-import { getAuth, signInWithRedirect, signInWithPopup, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth,
+     signInWithRedirect, 
+     signInWithPopup, 
+     createUserWithEmailAndPassword, 
+     GoogleAuthProvider, 
+     signInWithEmailAndPassword, 
+     signOut,
+     onAuthStateChanged
+    } from 'firebase/auth';
 import {getFirestore, doc, getDoc, setDoc} from 'firebase/firestore'
 
 // Your web app's Firebase configuration
@@ -68,3 +76,8 @@ export const loginUserWithEmailAndPassword = async (email, password) => {
 export const signInUserWithEmailAndPassword = async (email, password) => {
     return await signInWithEmailAndPassword(auth, email, password);
 }
+
+export const signOutUser = async () => await signOut(auth);
+
+/* Observable listener/open listener => callback triggers when auth changes*/
+export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth, callback);
