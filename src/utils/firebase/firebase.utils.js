@@ -13,6 +13,8 @@ import { getAuth,
     } from 'firebase/auth';
 import {getFirestore, doc, getDoc, setDoc} from 'firebase/firestore'
 
+import { collection, writeBatch, query, getDocs } from "firebase/firestore";
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCeHZxTsHkH1QImmKWNDuevi97pDHM8jXg",
@@ -81,3 +83,29 @@ export const signOutUser = async () => await signOut(auth);
 
 /* Observable listener/open listener => callback triggers when auth changes*/
 export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth, callback);
+
+////////////////////////////////////////////////////////////////////////////////
+//Upload data to fire store
+export const addCollectionAndDocument = async (collectionKey, objectsToAdd) => {
+    const collectionRef = collection(db, collectionKey);
+    const batch = writeBatch(db);
+    objectsToAdd.forEach((obj) => {
+        const docRef = doc(collectionRef, obj.title.toLowerCase());
+        batch.set(docRef, obj);
+    });
+    await batch.commit();
+    console.log('Data uploaded')
+}
+
+//fetch data from firestore
+export const getCategoriesAndDocuments = async () => {
+    const collectionRef = collection(db, 'categories');
+    const q = query(collectionRef);
+    const querySnapShot = await getDocs(q);
+    const categoryMap  = querySnapShot.docs.reduce((acc, docSnapShot)=> {
+        const {title, items} = docSnapShot.data();
+        acc[title.toLowerCase()] = items;
+        return acc;
+    }, {})
+    return categoryMap;
+}
