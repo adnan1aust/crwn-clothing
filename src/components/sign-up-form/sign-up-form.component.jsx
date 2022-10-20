@@ -3,6 +3,7 @@ import { loginUserWithEmailAndPassword, createUserDocumentFromAuth } from "../..
 import FormInput from "../form-input/form-input.component";
 import './sign-up-form.styles.scss';
 import Button from "../button/button.component";
+import { useNavigate } from "react-router-dom";
 
 const DEFAULT_FORM_FIELDS = {
     displayName : '',
@@ -15,6 +16,7 @@ const SignUpFrom = () => {
 
     const[formFields, setFormFields] = useState(DEFAULT_FORM_FIELDS);
     const { displayName, email, password, confirmPassword } = formFields;
+    const navigate = useNavigate();
 
     const onChangeHanler = (event) => {
         const { name, value } = event.target;
@@ -34,6 +36,7 @@ const SignUpFrom = () => {
 
             alert('Account created successfully, welcome ' + displayName);
             setFormFields(DEFAULT_FORM_FIELDS);
+            navigate('/')
         } catch (error){
             if(error.code === 'auth/email-already-in-use'){
                 alert('Provided email and password combination is already registered.');

@@ -3,6 +3,7 @@ import { signInWithGooglePopUp, signInUserWithEmailAndPassword } from "../../uti
 import FormInput from "../form-input/form-input.component";
 import './sign-in-form.styles.scss';
 import Button from "../button/button.component";
+import { useNavigate } from "react-router-dom";
 
 const DEFAULT_FORM_FIELDS = {
     email: '',
@@ -14,6 +15,8 @@ const SignInFrom = () => {
     const[formFields, setFormFields] = useState(DEFAULT_FORM_FIELDS);
     const { email, password } = formFields;
 
+    const navigate = useNavigate();
+
     const onChangeHanler = (event) => {
         const { name, value } = event.target;
         setFormFields({...formFields, [name]:value})
@@ -23,6 +26,7 @@ const SignInFrom = () => {
         event.preventDefault();
         try{
             await signInUserWithEmailAndPassword(email, password);
+            navigate('/')
             setFormFields(DEFAULT_FORM_FIELDS);
         } catch (error){
             if(error.code === 'auth/wrong-password'){
@@ -37,6 +41,7 @@ const SignInFrom = () => {
     const logGoogleUser = async () =>{
         //authenticate use and get the user info back
         await signInWithGooglePopUp();
+        navigate('/')
     }
 
     return(
